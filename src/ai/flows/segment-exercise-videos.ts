@@ -26,10 +26,10 @@ const SegmentExerciseVideoOutputSchema = z.object({
     z.object({
       startTime: z.number().describe('The start time of the segment in seconds.'),
       endTime: z.number().describe('The end time of the segment in seconds.'),
-      action: z.string().describe('The action performed in the segment.'),
+      action: z.string().describe('A concise name for the action performed (e.g., "Push-up", "Squat", "Jump").'),
     })
-  ).describe('An array of segments, each representing a repetition or action.'),
-  analysis: z.string().describe('The overall analysis of the video and segments.'),
+  ).describe('An array of segments, each representing a single repetition or action.'),
+  analysis: z.string().describe('A brief, encouraging summary of the performance, including the total number of repetitions detected. Example: "Great effort! You completed 15 repetitions."'),
 });
 export type SegmentExerciseVideoOutput = z.infer<typeof SegmentExerciseVideoOutputSchema>;
 
@@ -41,33 +41,18 @@ const prompt = ai.definePrompt({
   name: 'segmentExerciseVideoPrompt',
   input: {schema: SegmentExerciseVideoInputSchema},
   output: {schema: SegmentExerciseVideoOutputSchema},
-  prompt: `You are an AI assistant that analyzes exercise videos and segments them into individual repetitions or actions.
+  prompt: `You are an AI assistant that analyzes exercise videos to count repetitions and segment the video into individual actions.
 
-You will receive a video of an athlete performing an exercise and the type of exercise being performed. You will then analyze the video and identify the start and end times of each repetition or action.
+You will receive a video of an athlete performing an exercise and the type of exercise being performed. You must analyze the video and identify the start and end times of each complete repetition.
 
-Output the segments as an array of JSON objects, where each object contains the start time, end time, and action performed in the segment.
-
-Also provide an overall analysis of the video and segments.
+- The 'action' for each segment should be the name of the exercise (e.g., "Push-up", "Squat").
+- The 'analysis' should be a simple, positive summary statement confirming the total repetition count.
+- If no valid repetitions are detected, return an empty array for 'segments' and an appropriate analysis message.
 
 Exercise Type: {{{exerciseType}}}
 Video: {{media url=videoDataUri}}
 
-Example Output:
-{
-  "segments": [
-    {
-      "startTime": 0,
-      "endTime": 5,
-      "action": "Squat"
-    },
-    {
-      "startTime": 5,
-      "endTime": 10,
-      "action": "Squat"
-    }
-  ],
-  "analysis": "The video shows the athlete performing squats. The athlete performed 2 squats in the video."
-}
+Output the segments as an array of JSON objects and provide the summary analysis.
 `,
 });
 

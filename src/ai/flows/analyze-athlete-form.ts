@@ -22,7 +22,7 @@ const AnalyzeAthleteFormInputSchema = z.object({
 export type AnalyzeAthleteFormInput = z.infer<typeof AnalyzeAthleteFormInputSchema>;
 
 const AnalyzeAthleteFormOutputSchema = z.object({
-  analysis: z.string().describe('The AI analysis of the athlete form, including measurements and observations.'),
+  analysis: z.string().describe('A detailed, user-friendly analysis of the athlete\'s form in Markdown format. This should include specific, actionable feedback on posture, technique, and consistency.'),
 });
 export type AnalyzeAthleteFormOutput = z.infer<typeof AnalyzeAthleteFormOutputSchema>;
 
@@ -34,15 +34,20 @@ const prompt = ai.definePrompt({
   name: 'analyzeAthleteFormPrompt',
   input: {schema: AnalyzeAthleteFormInputSchema},
   output: {schema: AnalyzeAthleteFormOutputSchema},
-  prompt: `You are an expert sports coach analyzing athlete form during exercise.
+  prompt: `You are an expert sports coach analyzing an athlete's form. Your goal is to provide specific, actionable feedback in a user-friendly Markdown format.
 
-You will analyze the provided video of the athlete performing the specified exercise and provide feedback on their technique.
-Focus on relevant measurements and observations, and include them in your analysis.
+Analyze the provided video of the athlete performing the specified exercise. Your analysis should be structured and easy to read.
+
+- Start with a brief, encouraging summary.
+- Use bullet points to highlight 2-3 key strengths of their performance.
+- Use a separate section with bullet points for 2-3 "Areas for Improvement." For each point, clearly describe the issue and provide a concrete suggestion for correction.
+- Focus on posture, range of motion, speed, and consistency relevant to the specific exercise.
+- Ensure your feedback is directly related to the exercise shown in the video.
 
 Exercise Type: {{{exerciseType}}}
 Video: {{media url=videoDataUri}}
 
-Analysis: `,
+Generate the analysis in Markdown format.`,
 });
 
 const analyzeAthleteFormFlow = ai.defineFlow(

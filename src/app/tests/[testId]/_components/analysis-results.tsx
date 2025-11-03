@@ -2,6 +2,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from '@/components/ui/table';
 import type { AnalyzeAthleteFormOutput } from '@/ai/flows/analyze-athlete-form';
 import type { SegmentExerciseVideoOutput } from '@/ai/flows/segment-exercise-videos';
+import ReactMarkdown from 'react-markdown';
 
 interface AnalysisResultsProps {
   formAnalysis: AnalyzeAthleteFormOutput | null;
@@ -15,14 +16,16 @@ export function AnalysisResults({ formAnalysis, segmentation }: AnalysisResultsP
         <AccordionItem value="form-analysis">
           <AccordionTrigger className="text-lg font-semibold">AI Form Analysis</AccordionTrigger>
           <AccordionContent>
-            <p className="text-sm text-foreground">{formAnalysis.analysis}</p>
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <ReactMarkdown>{formAnalysis.analysis}</ReactMarkdown>
+            </div>
           </AccordionContent>
         </AccordionItem>
       )}
 
       {segmentation && segmentation.segments.length > 0 && (
         <AccordionItem value="segmentation">
-          <AccordionTrigger className="text-lg font-semibold">Automated Test Segmentation</AccordionTrigger>
+          <AccordionTrigger className="text-lg font-semibold">Automated Repetition Count</AccordionTrigger>
           <AccordionContent>
              <p className="text-sm text-foreground mb-4">{segmentation.analysis}</p>
             <Table>

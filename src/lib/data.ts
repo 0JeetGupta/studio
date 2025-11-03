@@ -11,6 +11,9 @@ import {
   Crown,
   LineChart,
   type LucideIcon,
+  Flame,
+  ArrowUpFromDot,
+  HeartPulse,
 } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
 
@@ -22,6 +25,30 @@ export type Test = {
 };
 
 export const tests: Test[] = [
+  {
+    id: 'push-ups',
+    name: 'Push-ups',
+    description: 'Test your upper body strength.',
+    icon: Flame,
+  },
+  {
+    id: 'pull-ups',
+    name: 'Pull-ups',
+    description: 'Assess your back and bicep strength.',
+    icon: ArrowUpFromDot,
+  },
+    {
+    id: 'squats',
+    name: 'Squats',
+    description: 'Measure your lower body strength.',
+    icon: Dumbbell,
+  },
+  {
+    id: 'skipping',
+    name: 'Skipping',
+    description: 'Evaluate your coordination and stamina.',
+    icon: HeartPulse,
+  },
   {
     id: 'vertical-jump',
     name: 'Vertical Jump',
@@ -61,6 +88,22 @@ export type Benchmark = {
 };
 
 export const benchmarks: Benchmark = {
+  'push-ups': {
+    unit: 'reps',
+    levels: { beginner: 10, intermediate: 25, advanced: 40, elite: 50 },
+  },
+  'pull-ups': {
+    unit: 'reps',
+    levels: { beginner: 1, intermediate: 5, advanced: 10, elite: 20 },
+  },
+  'squats': {
+    unit: 'reps',
+    levels: { beginner: 20, intermediate: 40, advanced: 60, elite: 100 },
+  },
+  'skipping': {
+    unit: 'reps',
+    levels: { beginner: 50, intermediate: 100, advanced: 200, elite: 300 },
+  },
   'sit-ups': {
     unit: 'reps',
     levels: {
