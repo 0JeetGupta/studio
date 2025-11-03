@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { tests, badges, cityLeaderboardData, stateLeaderboardData, nationalLeaderboardData, BadgeData, LeaderboardEntry } from '@/lib/data';
+import { tests, badges, cityLeaderboardData, stateLeaderboardData, nationalLeaderboardData, BadgeData, LeaderboardEntry, progressData } from '@/lib/data';
 import { Header } from '@/components/header';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,7 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowRight, Trophy, Crown } from 'lucide-react';
+import { ArrowRight, Trophy, Crown, LineChart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
@@ -30,6 +30,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { CartesianGrid, XAxis, Line, ComposedChart } from 'recharts';
 
 function TestGrid() {
   const { user, loading } = useAuth();
@@ -141,6 +143,37 @@ function MyBadges() {
   );
 }
 
+function ProgressReport() {
+    const chartConfig = {
+    score: {
+      label: 'Overall Score',
+      color: 'hsl(var(--primary))',
+    },
+  };
+
+  return (
+    <Card className="col-span-1 dashboard-card">
+        <CardHeader>
+             <div className="flex items-center gap-2">
+                <LineChart className="h-6 w-6 text-primary" />
+                <CardTitle className="font-headline">Progress Report</CardTitle>
+            </div>
+            <CardDescription>Your overall performance trend over the last 6 months.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+                <ComposedChart data={progressData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => value.slice(0, 3)} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Line dataKey="score" type="monotone" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
+                </ComposedChart>
+            </ChartContainer>
+        </CardContent>
+    </Card>
+  );
+}
+
 function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
   return (
     <Table>
@@ -176,7 +209,7 @@ function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
 
 function Leaderboard() {
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-3 dashboard-card">
+    <Card className="col-span-1 md:col-span-3 dashboard-card">
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="space-y-1">
           <CardTitle className="font-headline">Leaderboard</CardTitle>
@@ -286,8 +319,13 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <TestGrid />
-            <MyBadges />
-            <RankingSystemExplanation />
+            <div className="md:col-span-2 grid gap-6">
+                <MyBadges />
+                <RankingSystemExplanation />
+            </div>
+            <div className="md:col-span-1">
+                <ProgressReport />
+            </div>
             <Leaderboard />
           </div>
         </div>

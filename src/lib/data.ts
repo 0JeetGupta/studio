@@ -9,6 +9,7 @@ import {
   Star,
   Wind,
   Crown,
+  LineChart,
   type LucideIcon,
 } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
@@ -182,6 +183,15 @@ export const nationalLeaderboardData: LeaderboardEntry[] = [
   { rank: 3, name: 'Ravi Kumar', score: 14900, avatar: 'https://picsum.photos/seed/L1/40/40', level: 'Master' },
   { rank: 4, name: 'Meera Nair', score: 14750, avatar: 'https://picsum.photos/seed/N2/40/40', level: 'Master' },
   { rank: 5, name: 'Aditya Rao', score: 14600, avatar: 'https://picsum.photos/seed/N3/40/40', level: 'Master' },
+];
+
+export const progressData = [
+    { month: "January", score: 3200 },
+    { month: "February", score: 3500 },
+    { month: "March", score: 3400 },
+    { month: "April", score: 3800 },
+    { month: "May", score: 4100 },
+    { month: "June", score: 4490 },
 ];
 
 
