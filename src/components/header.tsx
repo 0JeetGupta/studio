@@ -11,11 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from './ui/button';
-import { useUser } from '@/firebase';
-import { getAuth, signOut } from 'firebase/auth';
-import { useFirebaseApp } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from './ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
 
 export function KhelKhojIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -43,13 +41,11 @@ export function KhelKhojIcon(props: React.SVGProps<SVGSVGElement>) {
 }
 
 function UserNav() {
-  const { user, loading } = useUser();
-  const app = useFirebaseApp();
-  const auth = getAuth(app);
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut(auth);
+    await logout();
     router.push('/login');
   };
 
@@ -70,7 +66,7 @@ function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`} alt={user.displayName || 'User'} />
+            <AvatarImage src={user.photoURL || `https://picsum.photos/seed/${user.id}/100/100`} alt={user.displayName || 'User'} />
             <AvatarFallback>{user.displayName?.charAt(0) || user.email?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>
         </Button>

@@ -11,10 +11,9 @@ import { Input } from '@/components/ui/input';
 import { KhelKhojIcon } from '@/components/header';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { useFirebaseApp } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/hooks/use-auth';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -27,9 +26,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  const app = useFirebaseApp();
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+  const { login } = useAuth();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -42,29 +39,24 @@ export default function LoginPage() {
   const handleEmailLogin = async (values: LoginFormValues) => {
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      await login(values.email, values.password);
       router.push('/');
     } catch (error: any) {
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description: error.message,
+        description: error.message || 'An unexpected error occurred.',
       });
       setIsLoading(false);
     }
   };
   
   const handleGoogleSignIn = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-      router.push('/');
-    } catch (error: any) {
-       toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: error.message,
-      });
-    }
+    toast({
+      variant: 'destructive',
+      title: 'Not Implemented',
+      description: 'Google Sign-In is not implemented in this local setup.',
+    });
   };
 
   return (

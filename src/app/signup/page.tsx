@@ -11,12 +11,9 @@ import { Input } from '@/components/ui/input';
 import { KhelKhojIcon } from '@/components/header';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { useFirebaseApp } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { doc, setDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
+import { useAuth } from '@/hooks/use-auth';
 
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -30,9 +27,7 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  const app = useFirebaseApp();
-  const db = useFirestore();
-  const auth = getAuth(app);
+  const { signup } = useAuth();
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -46,21 +41,7 @@ export default function SignupPage() {
   const handleEmailSignup = async (values: SignupFormValues) => {
     setIsLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      const user = userCredential.user;
-      
-      await updateProfile(user, {
-        displayName: values.name,
-      });
-
-      if (db) {
-        await setDoc(doc(db, 'users', user.uid), {
-          uid: user.uid,
-          displayName: values.name,
-          email: values.email,
-          createdAt: new Date(),
-        });
-      }
+      await signup(values.name, values.email, values.password);
 
       toast({
         title: 'Account Created',
@@ -72,7 +53,7 @@ export default function SignupPage() {
       toast({
         variant: 'destructive',
         title: 'Sign-up Failed',
-        description: error.message,
+        description: error.message || 'An unexpected error occurred.',
       });
       setIsLoading(false);
     }

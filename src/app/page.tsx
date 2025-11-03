@@ -23,10 +23,10 @@ import {
 } from '@/components/ui/table';
 import { ArrowRight, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useUser } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 function TestGrid({ isLoggedIn, isLoading }: { isLoggedIn: boolean, isLoading: boolean }) {
   const { toast } = useToast();
@@ -179,7 +179,7 @@ function Leaderboard() {
 }
 
 export default function Home() {
-  const { user, loading } = useUser();
+  const { user, loading } = useAuth();
   const isLoggedIn = !loading && !!user;
 
   return (
