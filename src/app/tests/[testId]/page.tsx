@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function TestPage({ params }: { params: { testId: string } }) {
+export default async function TestPage({ params }: { params: { testId: string } }) {
   const test = getTestById(params.testId);
 
   if (!test) {
