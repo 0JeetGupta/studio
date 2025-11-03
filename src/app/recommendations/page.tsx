@@ -12,7 +12,6 @@ import { Header } from '@/components/header';
 import { Loader2, Sparkles, Bot, Pizza, Dumbbell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateRecommendations } from '@/ai/flows/generate-recommendations';
-import type { GenerateRecommendationsOutput } from '@/ai/flows/recommendations.d';
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -27,7 +26,7 @@ type RecommendationFormValues = {
   photo?: File;
 };
 
-function RecommendationResults({ results }: { results: GenerateRecommendationsOutput }) {
+function RecommendationResults({ results }: { results: any }) {
   return (
     <Card className="mt-8">
       <CardHeader>
@@ -60,7 +59,7 @@ function RecommendationResults({ results }: { results: GenerateRecommendationsOu
 export default function RecommendationsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState<GenerateRecommendationsOutput | null>(null);
+  const [recommendations, setRecommendations] = useState<any | null>(null);
   const { toast } = useToast();
 
   const form = useForm<RecommendationFormValues>({
