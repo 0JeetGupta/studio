@@ -152,14 +152,14 @@ export function NavMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link href="/" legacyBehavior passHref>
+          <Link href="/" passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Dashboard
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/recommendations" legacyBehavior passHref>
+          <Link href="/recommendations" passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Recommendations
             </NavigationMenuLink>
