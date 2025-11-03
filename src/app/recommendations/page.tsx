@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
-  Form,
   FormField,
   FormItem,
   FormLabel,
@@ -35,18 +34,9 @@ import { getAiRecommendations } from './actions';
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import ReactMarkdown from 'react-markdown';
+import type { GenerateRecommendationsInput } from '@/ai/flows/recommendations.d';
 
-type RecommendationFormValues = {
-  age: number;
-  weight: number;
-  height: number;
-  goal: 'lose_weight' | 'bulk_up' | 'get_fit';
-  activityLevel:
-    | 'sedentary'
-    | 'lightly_active'
-    | 'moderately_active'
-    | 'very_active';
-  medical?: string;
+type RecommendationFormValues = Omit<GenerateRecommendationsInput, 'photoDataUri'> & {
   photo?: FileList;
 };
 
