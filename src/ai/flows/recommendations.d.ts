@@ -9,7 +9,7 @@ export const GenerateRecommendationsInputSchema = z.object({
     .describe('The primary fitness goal of the user.'),
   activityLevel: z
     .enum(['sedentary', 'lightly_active', 'moderately_active', 'very_active'])
-    .describe('The user\'s current activity level.'),
+    .describe("The user's current activity level."),
   medical: z
     .string()
     .optional()

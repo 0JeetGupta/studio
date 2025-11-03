@@ -30,9 +30,9 @@ User's Information:
 
 Based on this information, provide a comprehensive and actionable plan.
 
-Generate a detailed workout plan. It should be easy to follow. Include the number of workout days per week, and a mix of exercises (e.g., Cardio, Strength, Flexibility).
+Generate a detailed workout plan. It should be easy to follow. Include the number of workout days per week, and a mix of exercises (e.g., Cardio, Strength, Flexibility). Present this plan in Markdown format.
 
-Then, generate a detailed diet and nutrition plan. Provide sample meals. **IMPORTANT**: You MUST strictly adhere to any medical conditions, deficiencies, or allergies mentioned. If the user mentions an allergy (e.g., peanuts), do not include that ingredient in your suggestions. If no medical information is given, create a general healthy plan and explicitly state that they should consult with a healthcare professional before starting any new diet.
+Then, generate a detailed diet and nutrition plan. Provide sample meals. **IMPORTANT**: You MUST strictly adhere to any medical conditions, deficiencies, or allergies mentioned. If the user mentions an allergy (e.g., peanuts), do not include that ingredient in your suggestions. If no medical information is given, create a general healthy plan and explicitly state that they should consult with a healthcare professional before starting any new diet. Present this plan in Markdown format.
 
 Format your entire response as a single JSON object that conforms to the output schema.
 `,
@@ -49,3 +49,5 @@ const generateRecommendationsFlow = ai.defineFlow(
     return output!;
   }
 );
+
+export { type GenerateRecommendationsInput, type GenerateRecommendationsOutput };
