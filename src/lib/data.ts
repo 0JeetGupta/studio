@@ -8,6 +8,7 @@ import {
   Zap,
   Star,
   Wind,
+  Crown,
   type LucideIcon,
 } from 'lucide-react';
 import { PlaceHolderImages } from './placeholder-images';
@@ -155,15 +156,34 @@ export type LeaderboardEntry = {
   name: string;
   score: number;
   avatar: string;
+  level: 'Rookie' | 'Intermediate' | 'Pro' | 'Master' | 'Grandmaster';
 };
 
-export const leaderboardData: LeaderboardEntry[] = [
-  { rank: 1, name: 'Ravi Kumar', score: 4850, avatar: 'https://picsum.photos/seed/L1/40/40' },
-  { rank: 2, name: 'Priya Sharma', score: 4720, avatar: 'https://picsum.photos/seed/L2/40/40' },
-  { rank: 3, name: 'Amit Singh', score: 4680, avatar: 'https://picsum.photos/seed/L3/40/40' },
-  { rank: 4, name: 'Anjali Das', score: 4510, avatar: 'https://picsum.photos/seed/L4/40/40' },
-  { rank: 5, name: 'You', score: 4490, avatar: 'https://picsum.photos/seed/You/40/40' },
+export const cityLeaderboardData: LeaderboardEntry[] = [
+  { rank: 1, name: 'Ravi Kumar', score: 4850, avatar: 'https://picsum.photos/seed/L1/40/40', level: 'Pro' },
+  { rank: 2, name: 'Priya Sharma', score: 4720, avatar: 'https://picsum.photos/seed/L2/40/40', level: 'Pro' },
+  { rank: 3, name: 'Amit Singh', score: 4680, avatar: 'https://picsum.photos/seed/L3/40/40', level: 'Pro' },
+  { rank: 4, name: 'Anjali Das', score: 4510, avatar: 'https://picsum.photos/seed/L4/40/40', level: 'Intermediate' },
+  { rank: 5, name: 'You', score: 4490, avatar: 'https://picsum.photos/seed/You/40/40', level: 'Intermediate' },
+  { rank: 6, name: 'Sanjay Verma', score: 4300, avatar: 'https://picsum.photos/seed/L5/40/40', level: 'Rookie' },
 ];
+
+export const stateLeaderboardData: LeaderboardEntry[] = [
+  { rank: 1, name: 'Vikram Rathore', score: 9800, avatar: 'https://picsum.photos/seed/S1/40/40', level: 'Master' },
+  { rank: 2, name: 'Ravi Kumar', score: 9650, avatar: 'https://picsum.photos/seed/L1/40/40', level: 'Master' },
+  { rank: 3, name: 'Priya Sharma', score: 9500, avatar: 'https://picsum.photos/seed/L2/40/40', level: 'Pro' },
+  { rank: 4, name: 'Amit Singh', score: 9210, avatar: 'https://picsum.photos/seed/L3/40/40', level: 'Pro' },
+  { rank: 5, name: 'Neha Reddy', score: 9150, avatar: 'https://picsum.photos/seed/S2/40/40', level: 'Pro' },
+];
+
+export const nationalLeaderboardData: LeaderboardEntry[] = [
+  { rank: 1, name: 'Arjun Desai', score: 15500, avatar: 'https://picsum.photos/seed/N1/40/40', level: 'Grandmaster' },
+  { rank: 2, name: 'Vikram Rathore', score: 15200, avatar: 'https://picsum.photos/seed/S1/40/40', level: 'Grandmaster' },
+  { rank: 3, name: 'Ravi Kumar', score: 14900, avatar: 'https://picsum.photos/seed/L1/40/40', level: 'Master' },
+  { rank: 4, name: 'Meera Nair', score: 14750, avatar: 'https://picsum.photos/seed/N2/40/40', level: 'Master' },
+  { rank: 5, name: 'Aditya Rao', score: 14600, avatar: 'https://picsum.photos/seed/N3/40/40', level: 'Master' },
+];
+
 
 export function getTestById(id: string | undefined): Test | undefined {
   if (!id) return undefined;

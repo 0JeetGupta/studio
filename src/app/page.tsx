@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { tests, badges, leaderboardData, BadgeData } from '@/lib/data';
+import { tests, badges, cityLeaderboardData, stateLeaderboardData, nationalLeaderboardData, BadgeData, LeaderboardEntry } from '@/lib/data';
 import { Header } from '@/components/header';
 import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,7 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ArrowRight, Trophy } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowRight, Trophy, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
@@ -111,16 +112,16 @@ function TestGrid() {
 }
 
 function MyBadges() {
-  const earnedBadges = badges.slice(0, 4); // Simulate earned badges
+  const earnedBadges = badges.slice(0, 3); // Simulate earned badges
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-2 dashboard-card">
+    <Card className="col-span-1 md:col-span-2 dashboard-card">
       <CardHeader>
         <CardTitle className="font-headline">My Badges</CardTitle>
         <CardDescription>
           Celebrate your achievements and milestones.
         </CardDescription>
       </CardHeader>
-      <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <CardContent className="grid grid-cols-3 gap-4 text-center">
         {earnedBadges.map((badge: BadgeData) => (
           <div key={badge.id} className="flex flex-col items-center gap-2">
             <Image
@@ -140,43 +141,103 @@ function MyBadges() {
   );
 }
 
+function LeaderboardTable({ data }: { data: LeaderboardEntry[] }) {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[50px]">Rank</TableHead>
+          <TableHead>Athlete</TableHead>
+          <TableHead>Level</TableHead>
+          <TableHead className="text-right">Score</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((entry) => (
+          <TableRow key={entry.rank} className={cn(entry.name === 'You' && 'bg-secondary')}>
+            <TableCell className="font-medium">{entry.rank}</TableCell>
+            <TableCell>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={entry.avatar} alt={entry.name} />
+                  <AvatarFallback>{entry.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span className="font-medium">{entry.name}</span>
+              </div>
+            </TableCell>
+            <TableCell>{entry.level}</TableCell>
+            <TableCell className="text-right">{entry.score}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
 function Leaderboard() {
   return (
-    <Card className="col-span-1 md:col-span-2 lg:col-span-1 dashboard-card">
+    <Card className="col-span-1 md:col-span-2 lg:col-span-3 dashboard-card">
       <CardHeader className="flex flex-row items-center justify-between">
         <div className="space-y-1">
           <CardTitle className="font-headline">Leaderboard</CardTitle>
-          <CardDescription>See how you rank among peers.</CardDescription>
+          <CardDescription>See how you rank against the competition.</CardDescription>
         </div>
         <Trophy className="h-8 w-8 text-accent" />
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]">Rank</TableHead>
-              <TableHead>Athlete</TableHead>
-              <TableHead className="text-right">Score</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {leaderboardData.map((entry) => (
-              <TableRow key={entry.rank} className={cn(entry.name === 'You' && 'bg-secondary')}>
-                <TableCell className="font-medium">{entry.rank}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={entry.avatar} alt={entry.name} />
-                      <AvatarFallback>{entry.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{entry.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">{entry.score}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <Tabs defaultValue="city">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="city">City</TabsTrigger>
+            <TabsTrigger value="state">State</TabsTrigger>
+            <TabsTrigger value="national">National</TabsTrigger>
+          </TabsList>
+          <TabsContent value="city">
+            <LeaderboardTable data={cityLeaderboardData} />
+          </TabsContent>
+          <TabsContent value="state">
+            <LeaderboardTable data={stateLeaderboardData} />
+          </TabsContent>
+          <TabsContent value="national">
+            <LeaderboardTable data={nationalLeaderboardData} />
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+}
+
+function RankingSystemExplanation() {
+  return (
+    <Card className="col-span-1 md:col-span-2 dashboard-card">
+      <CardHeader>
+         <div className="flex items-center gap-2">
+            <Crown className="h-6 w-6 text-primary" />
+            <CardTitle className="font-headline">Ranking System</CardTitle>
+          </div>
+        <CardDescription>Understand the path to becoming a top athlete.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4 text-sm">
+        <div className="flex items-start gap-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">1</div>
+          <div>
+            <h4 className="font-semibold">City Level</h4>
+            <p className="text-muted-foreground">Compete against athletes in your city. Finish in the Top 3 to get promoted to the State Level and earn the 'Pro' title.</p>
+          </div>
+        </div>
+         <div className="flex items-start gap-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">2</div>
+          <div>
+            <h4 className="font-semibold">State Level</h4>
+            <p className="text-muted-foreground">Prove you're among the best in the state. Top performers at this level are recognized as 'Master' athletes and advance to the National stage.</p>
+          </div>
+        </div>
+         <div className="flex items-start gap-4">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">3</div>
+          <div>
+            <h4 className="font-semibold">National Level</h4>
+            <p className="text-muted-foreground">The ultimate challenge. Compete with the nation's elite to achieve the prestigious 'Grandmaster' rank.</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
@@ -223,9 +284,10 @@ export default function Home() {
                 : 'The AI-Powered Mobile Platform for Democratizing Sports Talent Assessment. Log in to get started.'}
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <TestGrid />
             <MyBadges />
+            <RankingSystemExplanation />
             <Leaderboard />
           </div>
         </div>
