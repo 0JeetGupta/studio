@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Card,
@@ -21,14 +23,43 @@ import {
 } from '@/components/ui/table';
 import { ArrowRight, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useUser } from '@/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
-function TestGrid() {
+function TestGrid({ isLoggedIn, isLoading }: { isLoggedIn: boolean, isLoading: boolean }) {
+  if (isLoading) {
+    return (
+      <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+        <CardHeader>
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-64" />
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+             <Card key={i}>
+              <CardHeader>
+                <Skeleton className="h-6 w-32" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-4 w-full mb-4" />
+                <Skeleton className="h-9 w-full" />
+              </CardContent>
+            </Card>
+          ))}
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="col-span-1 md:col-span-2 lg:col-span-3">
       <CardHeader>
         <CardTitle className="font-headline">Start Your Assessment</CardTitle>
         <CardDescription>
-          Record your performance in the prescribed fitness tests.
+          {isLoggedIn
+            ? 'Record your performance in the prescribed fitness tests.'
+            : 'Log in to start your assessment and track your performance.'
+          }
         </CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -44,8 +75,8 @@ function TestGrid() {
               <p className="text-sm text-muted-foreground mb-4">
                 {test.description}
               </p>
-              <Button asChild size="sm" className="w-full">
-                <Link href={`/tests/${test.id}`}>
+              <Button asChild size="sm" className="w-full" disabled={!isLoggedIn}>
+                <Link href={isLoggedIn ? `/tests/${test.id}`: '#'}>
                   Start Test <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -130,19 +161,24 @@ function Leaderboard() {
 }
 
 export default function Home() {
+  const { user, loading } = useUser();
+  const isLoggedIn = !loading && !!user;
+
   return (
     <>
       <Header />
       <main className="flex-1">
         <div className="container mx-auto py-8 px-4 md:px-6">
           <div className="space-y-4 mb-8">
-            <h1 className="text-3xl font-bold font-headline">Welcome, Athlete!</h1>
+            <h1 className="text-3xl font-bold font-headline">
+              {isLoggedIn ? `Welcome, ${user?.displayName || 'Athlete'}!` : 'Welcome, Athlete!'}
+            </h1>
             <p className="text-muted-foreground">
               Your journey to greatness starts here. Assess your skills, track your progress, and get discovered.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <TestGrid />
+            <TestGrid isLoggedIn={isLoggedIn} isLoading={loading} />
             <MyBadges />
             <Leaderboard />
           </div>
