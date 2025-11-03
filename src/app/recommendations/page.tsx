@@ -13,7 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Header } from '@/components/header';
 import { Loader2, Sparkles, Bot, Pizza, Dumbbell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { generateRecommendations, GenerateRecommendationsOutput } from '@/ai/flows/generate-recommendations';
+import { generateRecommendations } from '@/ai/flows/generate-recommendations';
+import type { GenerateRecommendationsOutput } from '@/ai/flows/recommendations.d';
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
