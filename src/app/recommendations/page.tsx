@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
@@ -18,17 +16,16 @@ import type { GenerateRecommendationsOutput } from '@/ai/flows/recommendations.d
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-const recommendationSchema = z.object({
-  age: z.coerce.number().min(1, 'Age is required'),
-  weight: z.coerce.number().min(1, 'Weight is required'),
-  height: z.coerce.number().min(1, 'Height is required'),
-  goal: z.enum(['lose_weight', 'bulk_up', 'get_fit']),
-  activityLevel: z.enum(['sedentary', 'lightly_active', 'moderately_active', 'very_active']),
-  medical: z.string().optional(),
-  photo: z.any().optional(),
-});
-
-type RecommendationFormValues = z.infer<typeof recommendationSchema>;
+// Simplified form values without Zod on the client
+type RecommendationFormValues = {
+  age: number;
+  weight: number;
+  height: number;
+  goal: 'lose_weight' | 'bulk_up' | 'get_fit';
+  activityLevel: 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active';
+  medical?: string;
+  photo?: File;
+};
 
 function RecommendationResults({ results }: { results: GenerateRecommendationsOutput }) {
   return (
@@ -67,7 +64,6 @@ export default function RecommendationsPage() {
   const { toast } = useToast();
 
   const form = useForm<RecommendationFormValues>({
-    resolver: zodResolver(recommendationSchema),
     defaultValues: {
       goal: 'get_fit',
       activityLevel: 'moderately_active',
@@ -91,6 +87,18 @@ export default function RecommendationsPage() {
     setIsLoading(true);
     setRecommendations(null);
 
+    // Basic client-side check
+    if (!values.age || !values.weight || !values.height) {
+        toast({
+            variant: "destructive",
+            title: "Missing Information",
+            description: "Please fill out age, weight, and height."
+        });
+        setIsLoading(false);
+        return;
+    }
+
+
     let photoDataUri: string | undefined;
     if (values.photo) {
       photoDataUri = await new Promise((resolve, reject) => {
@@ -102,7 +110,13 @@ export default function RecommendationsPage() {
     }
     
     try {
-        const result = await generateRecommendations({ ...values, photoDataUri });
+        const result = await generateRecommendations({ 
+            ...values,
+            age: Number(values.age),
+            weight: Number(values.weight),
+            height: Number(values.height),
+            photoDataUri 
+        });
         setRecommendations(result);
         toast({
             title: "Recommendations Generated!",
@@ -144,7 +158,7 @@ export default function RecommendationsPage() {
                           <FormItem>
                             <FormLabel>Age</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder="e.g., 25" {...field} />
+                              <Input type="number" placeholder="e.g., 25" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -157,7 +171,7 @@ export default function RecommendationsPage() {
                           <FormItem>
                             <FormLabel>Weight (kg)</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder="e.g., 70" {...field} />
+                              <Input type="number" placeholder="e.g., 70" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -170,7 +184,7 @@ export default function RecommendationsPage() {
                           <FormItem>
                             <FormLabel>Height (cm)</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder="e.g., 180" {...field} />
+                              <Input type="number" placeholder="e.g., 180" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -244,7 +258,7 @@ export default function RecommendationsPage() {
                     <FormField
                       control={form.control}
                       name="photo"
-                      render={({ field }) => (
+                      render={() => (
                         <FormItem>
                           <FormLabel>Full Body Photo (Optional)</FormLabel>
                            <FormControl>
