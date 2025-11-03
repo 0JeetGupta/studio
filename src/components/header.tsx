@@ -84,14 +84,14 @@ function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/profile">
-            <UserIcon />
-            Profile
+            <UserIcon className="mr-2 h-4 w-4" />
+            <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <Settings />
-            Settings
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Settings</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
