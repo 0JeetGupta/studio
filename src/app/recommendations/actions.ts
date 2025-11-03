@@ -1,7 +1,6 @@
 'use server';
 
-import { generateRecommendations } from '@/ai/flows/generate-recommendations';
-import type { GenerateRecommendationsInput } from '@/ai/flows/recommendations.d';
+import { generateRecommendations, type GenerateRecommendationsInput } from '@/ai/flows/generate-recommendations';
 
 export async function getAiRecommendations(
   input: GenerateRecommendationsInput

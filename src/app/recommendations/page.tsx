@@ -34,13 +34,13 @@ import { getAiRecommendations } from './actions';
 import Image from 'next/image';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import ReactMarkdown from 'react-markdown';
-import type { GenerateRecommendationsInput } from '@/ai/flows/recommendations.d';
+import type { GenerateRecommendationsInput, GenerateRecommendationsOutput } from '@/ai/flows/generate-recommendations';
 
 type RecommendationFormValues = Omit<GenerateRecommendationsInput, 'photoDataUri'> & {
   photo?: FileList;
 };
 
-function RecommendationResults({ results }: { results: any }) {
+function RecommendationResults({ results }: { results: GenerateRecommendationsOutput | null }) {
   if (!results) {
     return null;
   }
@@ -88,7 +88,7 @@ function RecommendationResults({ results }: { results: any }) {
 export default function RecommendationsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [recommendations, setRecommendations] = useState<any | null>(null);
+  const [recommendations, setRecommendations] = useState<GenerateRecommendationsOutput | null>(null);
   const { toast } = useToast();
 
   const form = useForm<RecommendationFormValues>({
@@ -197,6 +197,7 @@ export default function RecommendationsPage() {
                                 type="number"
                                 placeholder="e.g., 25"
                                 {...field}
+                                value={field.value || ''}
                                 onChange={(e) =>
                                   field.onChange(
                                     parseInt(e.target.value, 10) || undefined
@@ -219,6 +220,7 @@ export default function RecommendationsPage() {
                                 type="number"
                                 placeholder="e.g., 70"
                                 {...field}
+                                value={field.value || ''}
                                 onChange={(e) =>
                                   field.onChange(
                                     parseInt(e.target.value, 10) || undefined
@@ -241,6 +243,7 @@ export default function RecommendationsPage() {
                                 type="number"
                                 placeholder="e.g., 180"
                                 {...field}
+                                value={field.value || ''}
                                 onChange={(e) =>
                                   field.onChange(
                                     parseInt(e.target.value, 10) || undefined
