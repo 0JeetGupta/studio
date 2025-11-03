@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default async function TestPage({ params }: { params: { testId: string } }) {
-  const test = getTestById(params.testId);
+export default async function TestPage({ params: { testId } }: { params: { testId: string } }) {
+  const test = getTestById(testId);
 
   if (!test) {
     notFound();
   }
+
+  const { icon: TestIcon, name, description, id } = test;
 
   return (
     <>
@@ -26,15 +28,15 @@ export default async function TestPage({ params }: { params: { testId: string } 
               </Link>
             </Button>
             <div className="flex items-center gap-4">
-              <test.icon className="h-10 w-10 text-primary" />
+              <TestIcon className="h-10 w-10 text-primary" />
               <div>
-                <h1 className="text-3xl font-bold font-headline">{test.name}</h1>
-                <p className="text-muted-foreground">{test.description}</p>
+                <h1 className="text-3xl font-bold font-headline">{name}</h1>
+                <p className="text-muted-foreground">{description}</p>
               </div>
             </div>
           </div>
 
-          <TestAnalysisClient testId={test.id} />
+          <TestAnalysisClient testId={id} />
         </div>
       </main>
     </>
