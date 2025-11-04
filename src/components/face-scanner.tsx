@@ -34,7 +34,7 @@ export function FaceScanner({ onScanComplete, onCancel, mode }: FaceScannerProps
       await Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
         faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-        faceapi.nets.faceRecognitionNet.loadFromUri(MODELURL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
       ]);
     } catch (error) {
       console.error("Failed to load models", error);
