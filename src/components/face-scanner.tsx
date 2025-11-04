@@ -28,11 +28,13 @@ export function FaceScanner({ onScanComplete, onCancel, mode }: FaceScannerProps
   const { toast } = useToast();
 
   const loadModels = useCallback(async () => {
+    // The models should be in the `public/models` directory.
+    const MODEL_URL = '/models';
     try {
       await Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
-        faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
-        faceapi.nets.faceRecognitionNet.loadFromUri('/models'),
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODELURL),
       ]);
     } catch (error) {
       console.error("Failed to load models", error);
@@ -79,7 +81,7 @@ export function FaceScanner({ onScanComplete, onCancel, mode }: FaceScannerProps
 
   const handleVideoPlay = () => {
     const interval = setInterval(async () => {
-      if (!videoRef.current || videoRef.current.paused || videoRef.current.ended) {
+      if (!videoRef.current || videoRef.current.paused || videoRef.current.ended || status !== 'scanning') {
         return clearInterval(interval);
       }
 
