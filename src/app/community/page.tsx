@@ -29,7 +29,7 @@ interface Message {
 
 const levelColorMap = {
   Pro: 'text-accent-foreground dark:text-accent',
-  Intermediate: 'text-primary',
+  Intermediate: 'text-sm',
   Rookie: 'text-muted-foreground',
 };
 

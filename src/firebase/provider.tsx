@@ -1,37 +1,53 @@
 'use client';
 
-import { createContext, useContext, type ReactNode } from 'react';
-import type { FirebaseApp } from 'firebase/app';
-import type { Auth } from 'firebase/auth';
-import type { Firestore } from 'firebase/firestore';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Auth, User } from 'firebase/auth';
+import { Firestore } from 'firebase/firestore';
+import { initializeFirebase } from './config';
 
-export interface FirebaseContextValue {
-  firebaseApp: FirebaseApp;
+interface FirebaseContextType {
   auth: Auth;
   firestore: Firestore;
+  user: User | null;
+  loading: boolean;
 }
 
-const FirebaseContext = createContext<FirebaseContextValue | null>(null);
+const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
-export function FirebaseProvider({
-  children,
-  ...value
-}: {
-  children: ReactNode;
-} & FirebaseContextValue) {
+export function FirebaseProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const { auth, firestore } = initializeFirebase();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
   return (
-    <FirebaseContext.Provider value={value}>{children}</FirebaseContext.Provider>
+    <FirebaseContext.Provider value={{ auth, firestore, user, loading }}>
+      {children}
+    </FirebaseContext.Provider>
   );
 }
 
-export const useFirebase = (): FirebaseContextValue => {
+export function useFirebase() {
   const context = useContext(FirebaseContext);
   if (!context) {
     throw new Error('useFirebase must be used within a FirebaseProvider');
   }
   return context;
-};
+}
 
-export const useFirebaseApp = (): FirebaseApp => useFirebase().firebaseApp;
-export const useFirestore = (): Firestore => useFirebase().firestore;
-export const useAuth = (): Auth => useFirebase().auth;
+export function useFirestore() {
+  return useFirebase().firestore;
+}
+
+export function useAuth() {
+  const { user, loading, auth } = useFirebase();
+  return { user, loading, auth };
+}

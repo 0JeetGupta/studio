@@ -45,7 +45,7 @@ export default function SignupPage() {
 
       toast({
         title: 'Account Created',
-        description: "Welcome to Khel Khoj! We're redirecting you...",
+        description: "Welcome to Fitness Fusion! We're redirecting you...",
       });
       router.push('/');
 

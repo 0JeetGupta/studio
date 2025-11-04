@@ -126,7 +126,7 @@ export default function LoginPage() {
         <div className="flex justify-center mb-6">
           <Link href="/" className="flex items-center gap-2 text-foreground">
             <KhelKhojIcon className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold font-headline">Khel Khoj</span>
+            <span className="text-2xl font-bold font-headline">Fitness Fusion</span>
           </Link>
         </div>
         <Card>

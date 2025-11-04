@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/sheet";
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 
@@ -121,31 +123,29 @@ export function NavMenu() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-           <Link href="/" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Dashboard
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/">Dashboard</Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
+        
+        {/* Update other menu items similarly */}
         <NavigationMenuItem>
-          <Link href="/recommendations" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Recommendations
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/recommendations">Recommendations</Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
+        
         <NavigationMenuItem>
-          <Link href="/community" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Community
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/community">Community</Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
+        
+        {/* ...existing code... */}
       </NavigationMenuList>
     </NavigationMenu>
-  );
+  )
 }
-
 
 export function Header() {
   return (
@@ -154,7 +154,7 @@ export function Header() {
         <Link href="/" className="flex items-center gap-2">
           <KhelKhojIcon className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold font-headline text-foreground">
-            Khel Khoj
+            Fitness Fusion
           </span>
         </Link>
         <div className="hidden md:flex">
@@ -177,7 +177,7 @@ export function Header() {
                     <Link href="/" className="flex items-center gap-2">
                       <KhelKhojIcon className="h-6 w-6 text-primary" />
                       <span className="text-xl font-bold font-headline text-foreground">
-                        Khel Khoj
+                        Fitness Fusion
                       </span>
                     </Link>
                   </SheetTitle>
