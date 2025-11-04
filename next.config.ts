@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/models/:path*',
+        destination: '/node_modules/face-api.js/weights/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
